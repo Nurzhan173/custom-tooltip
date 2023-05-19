@@ -6,47 +6,60 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <style>
+    :root {
+      --tooltip-top: 100%;
+      --tooltip-transform: translateX(-50%);
+    }
+
     *{
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+
     body{
       width: 100%;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      height: 130vh;
     }
+
     #tooltip {
       position: relative;
-      cursor: pointer;
-      border-bottom: 2px dotted;
+      width: 200px;
+
+      margin-top: 100px;
       padding: 7px;
+
+      cursor: pointer;
       font-size: 25px;
       font-weight: bold;
       font-family: sans-serif;
     }
+
     #tooltipText {
       position: absolute;
       left: 50%;
       top: 0;
       transform: translateX(-50%);
+
       background: #000;
       color: #fff;
+
       white-space: nowrap;
+
       padding: 10px 15px;
       border-radius: 7px;
+
       visibility: hidden;
       opacity: 0;
       transition: opacity 0.5s ease;
     }
+
     #tooltipText::before {
       content: "";
       position: absolute;
       left: 50%;
-      top: 100%;
-      transform: translateX(-50%);
+      top: var(--tooltip-top);
+      transform: var(--tooltip-transform);
       border: 15px solid;
       border-color: #000 #0000 #0000 #0000;
     }
@@ -64,5 +77,44 @@
     </span>
     <span>Hover over me</span>
   </div>
+
+  <script>
+
+    window.addEventListener('scroll', function() {
+      const tooltip = document.getElementById('tooltip');
+      const tooltipText = document.getElementById('tooltipText');
+      const tooltipRect = tooltip.getBoundingClientRect();
+
+      if(tooltipRect.top < 50) {
+        tooltipText.style.top = "130%";
+        tooltipText.style.setProperty("--tooltip-top", "-60%");
+        tooltipText.style.setProperty("--tooltip-transform", "translateX(-50%) rotate(180deg)");
+      } else if (tooltipRect.top > -50) {
+        tooltipText.style.top = "-130%";
+        tooltipText.style.setProperty("--tooltip-top", "100%");
+        tooltipText.style.setProperty("--tooltip-transform", "translateX(-50%)");
+      }
+    });
+
+    //detect with intersection observer
+    // const tooltip = document.querySelector("#tooltip");
+    // const tooltipText = document.querySelector("#tooltipText");
+    //
+    // let observer = new IntersectionObserver(function(entries) {
+    //
+    //   if(!entries[0].isIntersecting) {
+    //     console.log('isScrolled')
+    //
+    //     tooltipText.style.top = "130%";
+    //
+    //   } else {
+    //     tooltipText.style.top = "-130%";
+    //   }
+    //
+    // }, { threshold: [0] });
+    //
+    // observer.observe(tooltipText);
+
+  </script>
 </body>
 </html>
